@@ -1,4 +1,3 @@
-
 import time
 import random
 import board
@@ -85,7 +84,7 @@ while True:
                     if not silent: print("led[{:3}] to colour[{}] hex[{:06x}]".format(led, c["name"], c[hex]))
                     dots[0] = c[hex]
                     pixels[led] = c[hex]
-                    pixels[led -1] = 0x000000
+                    if led > 5: pixels[led -1] = 0x000000
                     dots[0] = c[hex]
                     pixels.write()
                     time.sleep(speed)
