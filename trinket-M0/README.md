@@ -13,3 +13,8 @@ The output lead RED wire goes to pin 3, a digital out pin.
 
 Connect a flylead to pin 1, this will be the touch-input lead.  Connect it to a touch pad of your choice.
 
+Connect the Trinket to your PC, and it will appear as a USB flash drive named CIRCUITPY.  
+Copy the code.py file and the lib folder to the flash drive, and you should see the onboard LED flash red, green then blue, and change when you touch the touch-pin!
+
+Note: the Trinket (including the onbord LED) is powered from USB and/or external power.  The external LEDs are from external power only.  It's fine to connect external power and USB at the same time.
+
