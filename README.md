@@ -26,5 +26,6 @@ We would like to strongly recommend that we all use (as close as we can) a strip
   * Amazon - https://smile.amazon.com/gp/product/B009IIOQ7S/ref=ppx_yo_dt_b_asin_title_o05_s00?ie=UTF8&psc=1
   
  
+  A very rough assembly video is at https://youtu.be/NG8UuGX3OLE
   
  
