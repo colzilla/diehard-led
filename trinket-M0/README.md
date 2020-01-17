@@ -1,3 +1,5 @@
+![Trinket M0](https://github.com/colzilla/diehard-led/blob/master/images/3500-01.jpg)
+
 Power from the RX (5-6V) is fed into the BAT pin via 1 or 2 1N4001 diodes in series.  
 Each diode results in a 0.6v drop as the current passes.
 On the first car I tried my RX voltage was 6V, so after the 2x diodes, the voltage that made it to the Trinket was 4.8V.
