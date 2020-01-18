@@ -28,4 +28,7 @@ We would like to strongly recommend that we all use (as close as we can) a strip
  
   A very rough assembly video is at https://youtu.be/NG8UuGX3OLE
   
+  ![LED board](https://github.com/colzilla/diehard-led/blob/master/images/IMG_8283.jpg)
+  ![LED board with daisychain tail](https://github.com/colzilla/diehard-led/blob/master/images/IMG_8286.jpg)
+  
  
