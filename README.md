@@ -25,10 +25,11 @@ We would like to strongly recommend that we all use (as close as we can) a strip
 * Heatshrink tubing
   * Amazon - https://smile.amazon.com/gp/product/B009IIOQ7S/ref=ppx_yo_dt_b_asin_title_o05_s00?ie=UTF8&psc=1
   
- 
-  A very rough assembly video is at https://youtu.be/NG8UuGX3OLE
+A very rough assembly video is at https://youtu.be/NG8UuGX3OLE
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=NG8UuGX3OLE" target="_blank"><img src="http://img.youtube.com/vi/NG8UuGX3OLE/0.jpg" alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
   
-  ![LED board](https://github.com/colzilla/diehard-led/blob/master/images/IMG_8283.jpg)
-  ![LED board with daisychain tail](https://github.com/colzilla/diehard-led/blob/master/images/IMG_8286.jpg)
+![LED board](https://github.com/colzilla/diehard-led/blob/master/images/IMG_8283.jpg)
+![LED board with daisychain tail](https://github.com/colzilla/diehard-led/blob/master/images/IMG_8286.jpg)
   
  
