@@ -20,9 +20,7 @@ gnd.value = 1
 next_colour_delay = 0.3
 lock_timer = 0
 lock_time_limit = 100000
-speed=0.02
-
-speed = 0.0
+step_delay=0.02
 ledcount = 30
 silent = False
 
@@ -44,15 +42,15 @@ while True:
 
     dots[0] = (0xff0000)
     pixels.fill(0xff0000)
-    time.sleep(speed)
+    time.sleep(step_delay)
 
     dots[0] = (0x00ff00)
     pixels.fill(0x00ff00)
-    time.sleep(speed)
+    time.sleep(step_delay)
 
     dots[0] = (0x0000ff)
     pixels.fill(0x0000ff)
-    time.sleep(speed)
+    time.sleep(step_delay)
 
     dots[0] = (0x000000)
     pixels.fill(0x000000)
@@ -87,5 +85,5 @@ while True:
                     if led > 5: pixels[led -1] = 0x000000
                     dots[0] = c[hex]
                     pixels.write()
-                    time.sleep(speed)
+                    time.sleep(step_delay)
 
