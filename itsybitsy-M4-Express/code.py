@@ -26,14 +26,14 @@ silent = False
 
 colours = [ 
     {"name": "red", hex: 0xff0000}, 
-    {"name": "orange", hex: 0xff3300}, 
+    {"name": "orange", hex: 0xff2200}, 
     {"name": "yellow", hex: 0xff9900}, 
     {"name": "lime", hex: 0x99ff00}, 
     {"name": "green", hex: 0x00ff00}, 
-    {"name": "cyan", hex: 0x0088ff}, 
+    {"name": "cyan", hex: 0x1199ff}, 
     {"name": "blue", hex: 0x0000ff}, 
     {"name": "purple", hex: 0x3300ff}, 
-    {"name": "magenta", hex: 0xaa00aa}, 
+    {"name": "magenta", hex: 0xbb00aa}, 
     {"name": "grey", hex: 0x888888}, 
     ]
 
