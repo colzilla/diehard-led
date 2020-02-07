@@ -5,6 +5,8 @@ import adafruit_dotstar as dotstar
 import digitalio
 import neopixel
 
+#version="2020-02-07 02:49:00"
+
 #set up the onboard LED
 dots = dotstar.DotStar(board.APA102_SCK, board.APA102_MOSI, 1, brightness=1)
 #set up the plug-in pixel strip, in this case we are preparing for up to 100 LEDs
