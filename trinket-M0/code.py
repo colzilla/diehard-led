@@ -5,7 +5,6 @@ import adafruit_dotstar as dotstar
 import touchio
 import neopixel
 
-#not the prettiest code - and a lot of repetition but I've tried to make the code simple to understand for non-coders
 
 #this is the single LED omn the Trinket board
 dots = dotstar.DotStar(board.APA102_SCK, board.APA102_MOSI, 1, brightness=1)
@@ -17,262 +16,80 @@ pixels = neopixel.NeoPixel(board.A3, 100, brightness=1, auto_write=True)
 touch_pad = board.A0
 touch = touchio.TouchIn(touch_pad)
 
+#how long we wait befoce going on to the next colour
 next_colour_delay = 0.3
+#initialise the lock_timer to 0
 lock_timer = 0
-lock_time_limit = 10000
-speed=0.02
+#set the lock timer value - this is how long we wait before setting the LED permanently
+lock_time_limit = 100000
+#delay between steps
+step_delay=0.02
+#how many LEDs we are going to illuminate
+ledcount = 30
+#turn on and off the logging to serial console
+silent = False
 
-dots[0] = (0x000000)
-pixels.fill(0x000000)
-
+#create the colour matrix
+colours = [ 
+    {"name": "red", hex: 0xff0000}, 
+    {"name": "orange", hex: 0xff2200}, 
+    {"name": "yellow", hex: 0xff9900}, 
+    {"name": "lime", hex: 0x99ff00}, 
+    {"name": "green", hex: 0x00ff00}, 
+    {"name": "cyan", hex: 0x1199ff}, 
+    {"name": "blue", hex: 0x0000ff}, 
+    {"name": "purple", hex: 0x3300ff}, 
+    {"name": "magenta", hex: 0xbb00aa}, 
+    {"name": "grey", hex: 0x888888}, 
+    ]
 
 while True:    
-    print(touch.value)
+    # perform a little light show, cos we can
+    dots[0] = (0xff0000)
+    pixels.fill(0xff0000)
+    time.sleep(step_delay)
 
-    #red
-    colour=0xff0000
-    #set the LED colours sequentially, slowly enough that we can see it
-    for led in range(0, 5):
-        print("led[{}]".format(led))
-        pixels[led] = colour
-        dots[0] = colour
-        time.sleep(speed)
+    dots[0] = (0x00ff00)
+    pixels.fill(0x00ff00)
+    time.sleep(step_delay)
 
-    #green
-    colour=0x00ff00
-    #set the LED colours sequentially, slowly enough that we can see it
-    for led in range(0, 5):
-        print("led[{}]".format(led))
-        pixels[led] = colour
-        dots[0] = colour
-        time.sleep(speed)
+    dots[0] = (0x0000ff)
+    pixels.fill(0x0000ff)
+    time.sleep(step_delay)
 
-    #blue
-    colour=0x0000ff
-    #set the LED colours sequentially, slowly enough that we can see it
-    for led in range(0, 5):
-        print("led[{}]".format(led))
-        pixels[led] = colour
-        dots[0] = colour
-        time.sleep(speed)
+    dots[0] = (0x000000)
+    pixels.fill(0x000000)
 
-    #black/off
-    colour=0x000000
-    #set the LED colours off, slowly enough that we can see it
-    for led in range(0, 5):
-        print("led[{}]".format(led))
-        pixels[led] = colour
-        dots[0] = colour
-        time.sleep(speed)
-
-#this really belongs in a loop and we cycle through all the colours in a list, but for now, it's just sequential 
+    #now we go show the colours, going on to the next colour if the button is pressed before the timer runs out!
     while True:
-        #blue
-        colour = (0x0000ff)
-        #if we are still allowed to change the colour (ie not locked):
-        if lock_timer < lock_time_limit :
-            #set the onboard LED colour
-            dots[0] = colour
-            #set the LEDs on the external board (start at 0 end at (but not including) 5)
-            for led in range(0, 5):
-                print("setting led[{}] colour [{:06x}]".format(led, colour))
-                pixels[led] = colour
-            #restart the lock timer
-            lock_timer = 0
-        #here we are waiting for the lock timer to expire or for a touch input
-        while lock_timer < lock_time_limit and not touch.value: 
-            lock_timer = lock_timer + 1
-        #check - did we get a touch input? if not, stay here forever (we are locked)
-        while not touch.value and lock_timer < lock_time_limit: 
-            pass       
-        #wait a little while before going on to the next LED colour
-        time.sleep(next_colour_delay)
+        for c in colours:
+            if lock_timer < lock_time_limit :
+                #set the onboard LED colour
+                dots[0] = c[hex]
+                #set the LEDs on the external board (start at 0 end at (but not including) 5)
+                for led in range(0, 5):
+                    if not silent: print("led[{:3}] to colour[{}] hex[{:06x}]".format(led, c["name"], c[hex]))
+                    pixels[led] = c[hex]
+                    pixels.write()
+                #restart the lock timer
+                lock_timer = 0
+            #here we are waiting for the lock timer to expire or for a touch input
+            while lock_timer < lock_time_limit and not touch.value: 
+                lock_timer = lock_timer + 1
+            #check - did we get a touch input? if not, stay here forever (we are locked)
+            while not touch.value and lock_timer < lock_time_limit: 
+                pass       
+            #wait a little while before going on to the next LED colour
+            time.sleep(next_colour_delay)
 
-        #red
-        colour = (0xff0000)
-        #if we are still allowed to change the colour (ie not locked):
-        if lock_timer < lock_time_limit :
-            #set the onboard LED colour
-            dots[0] = colour
-            #set the LEDs on the external board (start at 0 end at (but not including) 5)
-            for led in range(0, 5):
-                print("setting led[{}] colour [{:06x}]".format(led, colour))
-                pixels[led] = colour
-            #restart the lock timer
-            lock_timer = 0
-        #here we are waiting for the lock timer to expire or for a touch input
-        while lock_timer < lock_time_limit and not touch.value: 
-            lock_timer = lock_timer + 1
-        #check - did we get a touch input? if not, stay here forever (we are locked)
-        while not touch.value and lock_timer < lock_time_limit: 
-            pass       
-        #wait a little while before going on to the next LED colour
-        time.sleep(next_colour_delay)
+        #now we're done, make the LEDs after the 5th one do a light show.
+        # while True:
+        #     for c in colours:
+        #         for led in range(5, ledcount + 1):
+        #             if not silent: print("led[{:3}] to colour[{}] hex[{:06x}]".format(led, c["name"], c[hex]))
+        #             pixels[led] = c[hex]
+        #             if led > 5: pixels[led -1] = 0x000000
+        #             pixels.write()
+        #             time.sleep(step_delay)
 
-        #orange
-        colour = (0xff3300)
-        #if we are still allowed to change the colour (ie not locked):
-        if lock_timer < lock_time_limit :
-            #set the onboard LED colour
-            dots[0] = colour
-            #set the LEDs on the external board (start at 0 end at (but not including) 5)
-            for led in range(0, 5):
-                print("setting led[{}] colour [{:06x}]".format(led, colour))
-                pixels[led] = colour
-            #restart the lock timer
-            lock_timer = 0
-        #here we are waiting for the lock timer to expire or for a touch input
-        while lock_timer < lock_time_limit and not touch.value: 
-            lock_timer = lock_timer + 1
-        #check - did we get a touch input? if not, stay here forever (we are locked)
-        while not touch.value and lock_timer < lock_time_limit: 
-            pass       
-        #wait a little while before going on to the next LED colour
-        time.sleep(next_colour_delay)
 
-        #yellow
-        colour = (0xffee00)
-        #if we are still allowed to change the colour (ie not locked):
-        if lock_timer < lock_time_limit :
-            #set the onboard LED colour
-            dots[0] = colour
-            #set the LEDs on the external board (start at 0 end at (but not including) 5)
-            for led in range(0, 5):
-                print("setting led[{}] colour [{:06x}]".format(led, colour))
-                pixels[led] = colour
-            #restart the lock timer
-            lock_timer = 0
-        #here we are waiting for the lock timer to expire or for a touch input
-        while lock_timer < lock_time_limit and not touch.value: 
-            lock_timer = lock_timer + 1
-        #check - did we get a touch input? if not, stay here forever (we are locked)
-        while not touch.value and lock_timer < lock_time_limit: 
-            pass       
-        #wait a little while before going on to the next LED colour
-        time.sleep(next_colour_delay)
-
-        #lime
-        colour = (0x77ff00)
-        #if we are still allowed to change the colour (ie not locked):
-        if lock_timer < lock_time_limit :
-            #set the onboard LED colour
-            dots[0] = colour
-            #set the LEDs on the external board (start at 0 end at (but not including) 5)
-            for led in range(0, 5):
-                print("setting led[{}] colour [{:06x}]".format(led, colour))
-                pixels[led] = colour
-            #restart the lock timer
-            lock_timer = 0
-        #here we are waiting for the lock timer to expire or for a touch input
-        while lock_timer < lock_time_limit and not touch.value: 
-            lock_timer = lock_timer + 1
-        #check - did we get a touch input? if not, stay here forever (we are locked)
-        while not touch.value and lock_timer < lock_time_limit: 
-            pass       
-        #wait a little while before going on to the next LED colour
-        time.sleep(next_colour_delay)
-
-        #green
-        colour = (0x00ff00)
-        #if we are still allowed to change the colour (ie not locked):
-        if lock_timer < lock_time_limit :
-            #set the onboard LED colour
-            dots[0] = colour
-            #set the LEDs on the external board (start at 0 end at (but not including) 5)
-            for led in range(0, 5):
-                print("setting led[{}] colour [{:06x}]".format(led, colour))
-                pixels[led] = colour
-            #restart the lock timer
-            lock_timer = 0
-        #here we are waiting for the lock timer to expire or for a touch input
-        while lock_timer < lock_time_limit and not touch.value: 
-            lock_timer = lock_timer + 1
-        #check - did we get a touch input? if not, stay here forever (we are locked)
-        while not touch.value and lock_timer < lock_time_limit: 
-            pass       
-        #wait a little while before going on to the next LED colour
-        time.sleep(next_colour_delay)
-
-        #cyan
-        colour = (0x0088ff)
-        #if we are still allowed to change the colour (ie not locked):
-        if lock_timer < lock_time_limit :
-            #set the onboard LED colour
-            dots[0] = colour
-            #set the LEDs on the external board (start at 0 end at (but not including) 5)
-            for led in range(0, 5):
-                print("setting led[{}] colour [{:06x}]".format(led, colour))
-                pixels[led] = colour
-            #restart the lock timer
-            lock_timer = 0
-        #here we are waiting for the lock timer to expire or for a touch input
-        while lock_timer < lock_time_limit and not touch.value: 
-            lock_timer = lock_timer + 1
-        #check - did we get a touch input? if not, stay here forever (we are locked)
-        while not touch.value and lock_timer < lock_time_limit: 
-            pass       
-        #wait a little while before going on to the next LED colour
-        time.sleep(next_colour_delay)
-
-        #purple
-        colour = (0x3300ff)
-        #if we are still allowed to change the colour (ie not locked):
-        if lock_timer < lock_time_limit :
-            #set the onboard LED colour
-            dots[0] = colour
-            #set the LEDs on the external board (start at 0 end at (but not including) 5)
-            for led in range(0, 5):
-                print("setting led[{}] colour [{:06x}]".format(led, colour))
-                pixels[led] = colour
-            #restart the lock timer
-            lock_timer = 0
-        #here we are waiting for the lock timer to expire or for a touch input
-        while lock_timer < lock_time_limit and not touch.value: 
-            lock_timer = lock_timer + 1
-        #check - did we get a touch input? if not, stay here forever (we are locked)
-        while not touch.value and lock_timer < lock_time_limit: 
-            pass       
-        #wait a little while before going on to the next LED colour
-        time.sleep(next_colour_delay)
-
-        #magenta
-        colour = (0xaa00aa)
-        #if we are still allowed to change the colour (ie not locked):
-        if lock_timer < lock_time_limit :
-            #set the onboard LED colour
-            dots[0] = colour
-            #set the LEDs on the external board (start at 0 end at (but not including) 5)
-            for led in range(0, 5):
-                print("setting led[{}] colour [{:06x}]".format(led, colour))
-                pixels[led] = colour
-            #restart the lock timer
-            lock_timer = 0
-        #here we are waiting for the lock timer to expire or for a touch input
-        while lock_timer < lock_time_limit and not touch.value: 
-            lock_timer = lock_timer + 1
-        #check - did we get a touch input? if not, stay here forever (we are locked)
-        while not touch.value and lock_timer < lock_time_limit: 
-            pass       
-        #wait a little while before going on to the next LED colour
-        time.sleep(next_colour_delay)
-
-        #grey
-        colour = (0xa9a9a9)
-        #if we are still allowed to change the colour (ie not locked):
-        if lock_timer < lock_time_limit :
-            #set the onboard LED colour
-            dots[0] = colour
-            #set the LEDs on the external board (start at 0 end at (but not including) 5)
-            for led in range(0, 5):
-                print("setting led[{}] colour [{:06x}]".format(led, colour))
-                pixels[led] = colour
-            #restart the lock timer
-            lock_timer = 0
-        #here we are waiting for the lock timer to expire or for a touch input
-        while lock_timer < lock_time_limit and not touch.value: 
-            lock_timer = lock_timer + 1
-        #check - did we get a touch input? if not, stay here forever (we are locked)
-        while not touch.value and lock_timer < lock_time_limit: 
-            pass       
-        #wait a little while before going on to the next LED colour
-        time.sleep(next_colour_delay)
